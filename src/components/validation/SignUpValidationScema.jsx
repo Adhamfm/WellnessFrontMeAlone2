@@ -9,8 +9,7 @@ const SignUpValidationForm = {
     email: yup
         .string()
         .email("Enter a valid email")
-        .required("Email is required")
-        .matches(/^[aA-zZ]+$/, 'Numbers and special characters are not allowed'),
+        .required("Email is required"),
     password: yup
         .string()
         .min(8, "Password must contain at least 8 characters")
