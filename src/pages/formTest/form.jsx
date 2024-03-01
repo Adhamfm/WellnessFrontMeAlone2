@@ -58,14 +58,6 @@ const form = props => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-      <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
         <Card>
           <CardContent>
             <TextField
@@ -171,7 +163,6 @@ const form = props => {
             </Button>
           </CardActions>
         </Card>
-        </Box>
       </form>
     </div>
   );
@@ -208,5 +199,6 @@ const Form = withFormik({
     }, 1000);
   }
 })(form);
+
 
 export default Form;

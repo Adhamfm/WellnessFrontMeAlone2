@@ -16,7 +16,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useFormControl } from '@mui/material/FormControl';
 import Logininput from '../../components/logininput';
 import { useState } from 'react';
-
+import { Field, Formik, withFormik, Form } from 'formik';
+import SignUpValidationForm from '../../components/validation/SignUpValidationScema';
+import * as yup from "yup";
 
 // function Copyright(props) { TODO:CHECK TYPOGRAPHY
 //   return (
@@ -33,7 +35,7 @@ import { useState } from 'react';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
-const defaultTheme = createTheme();
+
 const signupInfos = {
   firstName: "",
   lastName: "",
@@ -46,162 +48,161 @@ const signupInfos = {
   }
 }
 
-export default function SignUp() {
-  const [signup, setSignup] = useState(signupInfos)
-
-  const handleSignupChange = (e) => {
-    const { name, value } = e.target;
-    if (name.includes('.')) {
-      // If the name contains a dot, it indicates nested property
-      const [parentKey, childKey] = name.split('.');
-      setSignup({
-        ...signup,
-        [parentKey]: {
-          ...signup[parentKey],
-          [childKey]: value
-        }
-      });
-    } else {
-      // If not nested, update directly
-      setSignup({ ...signup, [name]: value });
-    }
-  }
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
-
-  console.log(signup)
-
+const initialValues ={
+  confirmPassword:""
+}
+const mergedValues = {
+  ...signupInfos,
+  ...initialValues
+}
+export default function Signup() {
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
 
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} />
 
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                  onChange={handleSignupChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                  onChange={handleSignupChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  id="address"
-                  label="Address"
-                  name="address"
-                  autoComplete="address"
-                  onChange={handleSignupChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-              <TextField
-                  required
-                  fullWidth
-                  id="countryCode"
-                  label="Country Code"
-                  name="phone.countryCode"
-                  autoComplete="family-name"
-                  onChange={handleSignupChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <TextField
-                  required
-                  fullWidth
-                  id="number"
-                  label="Phone Number"
-                  name="phone.number"
-                  autoComplete="family-name"
-                  onChange={handleSignupChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  onChange={handleSignupChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  onChange={handleSignupChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
-            </Grid>
-            <Button className='login-btn'
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
+        <Typography component="h1" variant="h5">
+          Sign up
+        </Typography>
+        <Box className="MaterialForm" sx={{ mt: 3 }}>
+          <Formik
+            initialValues={mergedValues}
+            onSubmit={(values, formikHelpers) => {
+              console.log(values)
+              formikHelpers.resetForm();
+            }}
+            validationSchema={yup.object().shape(SignUpValidationForm)}
+          >
+            {({ errors, isValid, touched, dirty }) => (
+              <Form>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <Field
+                      name="firstName"
+                      type="name"
+                      as={TextField}
+                      variant="outlined"
+                      color="primary"
+                      label="First Name"
+                      fullWidth
+                      error={Boolean(errors.firstName) && Boolean(touched.firstName)}
+                      helperText={Boolean(touched.firstName) && errors.firstName}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Field
+                      name="lastName"
+                      type="name"
+                      as={TextField}
+                      variant="outlined"
+                      color="primary"
+                      label="Last Name"
+                      fullWidth
+                      error={Boolean(errors.lastName) && Boolean(touched.lastName)}
+                      helperText={Boolean(touched.lastName) && errors.lastName}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      name="email"
+                      type="email"
+                      as={TextField}
+                      variant="outlined"
+                      color="primary"
+                      label="Email"
+                      fullWidth
+                      error={Boolean(errors.email) && Boolean(touched.email)}
+                      helperText={Boolean(touched.email) && errors.email}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Field
+                      name="phone.countryCode"
+                      type="string"
+                      as={TextField}
+                      variant="outlined"
+                      color="primary"
+                      label="Country Code"
+                      fullWidth
+                      error={Boolean(errors.phone?.countryCode) && Boolean(touched.phone?.countryCode)}
+                      helperText={Boolean(touched.phone?.countryCode) && errors.phone?.countryCode}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={8}>
+                    <Field
+                      name="phone.number"
+                      type="string"
+                      as={TextField}
+                      variant="outlined"
+                      color="primary"
+                      label="Phone Number"
+                      fullWidth
+                      error={Boolean(errors.phone?.number) && Boolean(touched.phone?.number)}
+                      helperText={Boolean(touched.phone?.number) && errors.phone?.number}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      name="address"
+                      type="string"
+                      as={TextField}
+                      variant="outlined"
+                      color="primary"
+                      label="Home Address"
+                      fullWidth
+                      error={Boolean(errors.address) && Boolean(touched.address)}
+                      helperText={Boolean(touched.address) && errors.address}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      name="password"
+                      type="password"
+                      as={TextField}
+                      variant="outlined"
+                      color="primary"
+                      label="Password"
+                      fullWidth
+                      error={Boolean(errors.password) && Boolean(touched.password)}
+                      helperText={Boolean(touched.password) && errors.password}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      name="confirmPassword"
+                      type="password"
+                      as={TextField}
+                      variant="outlined"
+                      color="primary"
+                      label="Confirm Password"
+                      fullWidth
+                      error={Boolean(errors.confirmPassword) && Boolean(touched.confirmPassword)}
+                      helperText={Boolean(touched.confirmPassword) && errors.confirmPassword}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Button variant="contained" type="submit" fullWidth sx={{ mt: 3, mb: 2 }}>TEST ME</Button>
+              </Form>
+            )}
+          </Formik>
+          <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link to="/login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
             </Grid>
-          </Box>
         </Box>
-      </Container>
-    </ThemeProvider>
-  );
+      </Box>
+    </Container>
+  )
 }
