@@ -19,6 +19,8 @@ import { useState } from 'react';
 import { Field, Formik, withFormik, Form } from 'formik';
 import SignUpValidationForm from '../../components/validation/SignUpValidationScema';
 import * as yup from "yup";
+import axios from 'axios';
+import { Alert } from '@mui/material';
 
 // function Copyright(props) { TODO:CHECK TYPOGRAPHY
 //   return (
@@ -37,25 +39,61 @@ import * as yup from "yup";
 
 
 const signupInfos = {
-  firstName: "",
-  lastName: "",
+  name: "",
   email: "",
   password: "",
   address: "",
   phone: {
     countryCode: "",
     number: ""
-  }
+  },
 }
 
-const initialValues ={
-  confirmPassword:""
+const initialValues = {
+  confirmPassword: "",
+  firstName: "",
+  lastName: "",
+  get name() { // Define a getter to access the combined name
+    return `${this.firstName} ${this.lastName}`;
+  }
 }
 const mergedValues = {
   ...signupInfos,
   ...initialValues
 }
 export default function Signup() {
+  // set initial values for server response 
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // send request to server
+  const signupSubmit = async () => {
+    try {
+      const { data } = await axios.post(`https://wellnesshub.onrender.com/api/v1/customer/register`,
+        {
+          name: signupInfos.name,
+          email: signupInfos.email,
+          password: signupInfos.password,
+          address: signupInfos.address,
+          phone: {
+            countryCode: signupInfos.phone.countryCode,
+            number: signupInfos.phone.number
+          },
+        }
+      );
+      setError("");
+      setSuccess(data);
+      console.log("SUCCESS")
+    } catch (error) {
+      setLoading(false);
+      setSuccess("");
+      console.log(error)
+      console.log(Object.keys(error))
+      setError(error.response.data.message);
+    }
+  };
+
   return (
 
     <Container component="main" maxWidth="xs">
@@ -74,10 +112,21 @@ export default function Signup() {
         </Typography>
         <Box className="MaterialForm" sx={{ mt: 3 }}>
           <Formik
+            enableReinitialize
             initialValues={mergedValues}
             onSubmit={(values, formikHelpers) => {
-              console.log(values)
-              formikHelpers.resetForm();
+              for (let key in values) {
+                // Assign the value from values object to loginInfo object
+                if (signupInfos.hasOwnProperty(key)) {
+
+                  signupInfos[key] = values[key];
+                }
+              }
+              signupInfos.name = values.firstName
+              console.log(signupInfos.name);
+              console.log(signupInfos);
+              //formikHelpers.resetForm();
+              signupSubmit();
             }}
             validationSchema={yup.object().shape(SignUpValidationForm)}
           >
@@ -191,16 +240,19 @@ export default function Signup() {
                 </Grid>
 
                 <Button variant="contained" type="submit" fullWidth sx={{ mt: 3, mb: 2 }}>TEST ME</Button>
+                {error && <div className="error_text"><Alert severity="error">{error}</Alert></div>}
+                {success && <div className="success_text">{success}</div>}
+                {loading && <div className="loading_text"> <CircularProgress color="inherit" /></div>}
               </Form>
             )}
           </Formik>
           <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link to="/login" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
+            <Grid item>
+              <Link to="/login" variant="body2">
+                Already have an account? Sign in
+              </Link>
             </Grid>
+          </Grid>
         </Box>
       </Box>
     </Container>

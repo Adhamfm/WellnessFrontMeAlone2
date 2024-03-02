@@ -1,8 +1,8 @@
-import * as React from 'react';
+
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 // import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -11,6 +11,11 @@ import Container from '@mui/material/Container';
 import { Field, Form, Formik } from 'formik';
 import * as yup from "yup";
 import LoginValidationForm from '../../components/validation/LoginValidationSchmea';
+import { useState } from 'react';
+import { Alert, CircularProgress } from '@mui/material';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import Cookies from 'js-cookie';
 
 const loginInfo = {
   email: "",
@@ -18,6 +23,44 @@ const loginInfo = {
 }
 
 export default function Login() {
+  const dispatch = useDispatch(); // to get userReducer
+  const navigate = useNavigate();
+  // set initial values for server response 
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // send request to server
+  const loginSubmit = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post(`https://wellnesshub.onrender.com/api/v1/customer/login`,
+        {
+          email: loginInfo.email,
+          password: loginInfo.password
+        }
+      );
+      setLoading(false);
+      setError("");
+      console.log(data); 
+      setSuccess(data.message); 
+      const {message, ...rest} = data;
+      setTimeout(()=>{
+        dispatch({type:"LOGIN", payload: rest});
+        Cookies.set('user',JSON.stringify(rest));
+
+        //navigate("/"); //Redirect to home
+      }, 2000);
+      
+    } 
+    catch (error) {
+      setLoading(false);
+      setSuccess("");
+      console.log(error)
+      console.log(Object.keys(error))
+      setError(error.response.data.message);
+    }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -36,10 +79,17 @@ export default function Login() {
         </Typography>
         <Box className="MaterialForm" sx={{ mt: 3 }}>
           <Formik
+            enableReinitialize
             initialValues={loginInfo}
             onSubmit={(values, formikHelpers) => {
-              console.log(values)
-              formikHelpers.resetForm();
+              //console.log(values)
+              for (let key in values) {
+                // Assign the value from values object to loginInfo object
+                loginInfo[key] = values[key];
+              }
+              console.log(loginInfo)
+              //formikHelpers.resetForm();
+              loginSubmit();
             }}
             validationSchema={yup.object().shape(LoginValidationForm)}
           >
@@ -59,7 +109,7 @@ export default function Login() {
                       helperText={Boolean(touched.email) && errors.email}
                     />
                   </Grid>
-                  
+
                   <Grid item xs={12}>
                     <Field
                       name="password"
@@ -73,20 +123,23 @@ export default function Login() {
                       helperText={Boolean(touched.password) && errors.password}
                     />
                   </Grid>
-                  
+
                 </Grid>
 
                 <Button variant="contained" type="submit" fullWidth sx={{ mt: 3, mb: 2 }}>TEST ME</Button>
+                {error && <div className="error_text"><Alert severity="error">{error}</Alert></div>/*TODO: CHANGE error TO UI/UX STYLE */} 
+                {success && <div className="success_text"><Alert severity="success">Login Successful</Alert></div>}
+                {loading && <div className="loading_text"><Grid item xs={12}> <CircularProgress color="inherit" /></Grid></div>}
               </Form>
             )}
           </Formik>
           <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link to="/signup" variant="body2">
-                  Don't have an account? Sign up!
-                </Link>
-              </Grid>
+            <Grid item>
+              <Link to="/signup" variant="body2">
+                Don't have an account? Sign up!
+              </Link>
             </Grid>
+          </Grid>
         </Box>
       </Box>
     </Container>
