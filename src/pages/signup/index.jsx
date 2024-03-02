@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useFormControl } from '@mui/material/FormControl';
 import Logininput from '../../components/logininput';
 import { useState } from 'react';
-
+// import { useHistory } from 'react-router-dom';
 
 // function Copyright(props) { TODO:CHECK TYPOGRAPHY
 //   return (
@@ -48,7 +48,7 @@ const signupInfos = {
 
 export default function SignUp() {
   const [signup, setSignup] = useState(signupInfos)
-
+  // const history = useHistory();
   const handleSignupChange = (e) => {
     const { name, value } = e.target;
     if (name.includes('.')) {
@@ -69,14 +69,20 @@ export default function SignUp() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get('email'),
       password: data.get('password'),
     });
+    
+    // history.push({
+    //   pathname: '/profile',
+    //   state: { signupData: signup }
+    // });
   };
-
   console.log(signup)
+
 
   return (
     <ThemeProvider theme={defaultTheme}>

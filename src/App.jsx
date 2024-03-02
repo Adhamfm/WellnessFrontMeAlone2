@@ -5,11 +5,13 @@ import Profile from './pages/profile';
 import Home from './pages/home';
 import Signup from './pages/signup';
 import FormTest from './pages/formTest';
+import Navbar from "./components/Navbar";
 
 function App() {
 
   return (
     <div>
+      <Navbar/>
       <Routes>
         <Route path="/" element={<Home/>} exact/>
         <Route path="/login" element={<Login/>} exact/>
