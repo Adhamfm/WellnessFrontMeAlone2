@@ -128,7 +128,7 @@ export default function Signup() {
                   signupInfos[key] = values[key];
                 }
               }
-              signupInfos.name = values.firstName
+              signupInfos.name = values.firstName + values.lastName
               console.log(signupInfos.name);
               console.log(signupInfos);
               //formikHelpers.resetForm();
