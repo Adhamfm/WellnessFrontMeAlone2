@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 // import Link from '@mui/material/Link';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -20,7 +20,7 @@ import { Field, Formik, withFormik, Form } from 'formik';
 import SignUpValidationForm from '../../components/validation/SignUpValidationScema';
 import * as yup from "yup";
 import axios from 'axios';
-import { Alert } from '@mui/material';
+import { Alert, CircularProgress } from '@mui/material';
 
 // function Copyright(props) { TODO:CHECK TYPOGRAPHY
 //   return (
@@ -62,6 +62,7 @@ const mergedValues = {
   ...initialValues
 }
 export default function Signup() {
+  const navigate = useNavigate();
   // set initial values for server response 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -70,6 +71,7 @@ export default function Signup() {
   // send request to server
   const signupSubmit = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.post(`https://wellnesshub.onrender.com/api/v1/customer/register`,
         {
           name: signupInfos.name,
@@ -83,8 +85,12 @@ export default function Signup() {
         }
       );
       setError("");
-      setSuccess(data);
-      console.log("SUCCESS")
+      setLoading(false);
+      setSuccess(data.message);
+      setTimeout(()=>{
+        navigate("/login"); //Redirect to login
+      }, 2000);
+      console.log("SUCCESS");
     } catch (error) {
       setLoading(false);
       setSuccess("");
@@ -241,7 +247,7 @@ export default function Signup() {
 
                 <Button variant="contained" type="submit" fullWidth sx={{ mt: 3, mb: 2 }}>TEST ME</Button>
                 {error && <div className="error_text"><Alert severity="error">{error}</Alert></div>}
-                {success && <div className="success_text">{success}</div>}
+                {success && <div className="success_text"><Alert severity="success">Login Successful</Alert></div>}
                 {loading && <div className="loading_text"> <CircularProgress color="inherit" /></div>}
               </Form>
             )}

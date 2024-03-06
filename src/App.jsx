@@ -18,6 +18,7 @@ function App() {
         <Route path="/signup" element={<Signup/>} exact/>
         <Route path="/test" element={<FormTest/>} exact/>
         <Route path="/signupcus" element={<SignupCustomerForm/>} exact/>
+        <Route path="*" element={<div><h1>404 PAGE NOT FOUND</h1></div>} exact/>
       </Routes>
     </div>
   );
