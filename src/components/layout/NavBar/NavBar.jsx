@@ -19,6 +19,7 @@ function NavBar() {
                         <li><Link to="/blog.html">Blog</Link></li>
                         <li><Link to="about">About</Link></li>
                         <li><Link to="contact.html">Contact Us</Link></li>
+                        <li><Link to="profile">Profile</Link></li>
                     </ul>
                 </nav>
                 <div className="header-list-icon">

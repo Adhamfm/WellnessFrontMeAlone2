@@ -2,7 +2,8 @@
 
 /* header styles */
 
-#header {
+
+/* #header {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -16,6 +17,21 @@
     top: 0;
     left: 0;
     right: 0;
+    margin-bottom: auto;
+}  */
+
+#header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
+    justify-content: space-between;
+    background-color: #000000;
+    padding: 20px 7%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+    position: sticky;
+    top: 0;
+    width: 100vw;
     margin-bottom: auto;
 }
 

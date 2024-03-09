@@ -4,43 +4,43 @@
     margin-top: 7%;
     padding: 20px;
     height: 100 rem;
-  }
-  
-  .profile-header {
+}
+
+.profile-header {
     text-align: center;
-  }
-  
-  .profile-content {
+}
+
+.profile-content {
     display: flex;
     /* justify-content: center; */
     align-items: flex-start;
-  }
-  
-  .profile-picture {
+}
+
+.profile-picture {
     /* margin-right: 50px; */
     justify-content: left;
+}
 
-  }
-  
-  .profile-picture img {
+.profile-picture img {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-  }
-  
-  .profile-details {
+}
+
+.profile-details {
     max-width: 400px;
     justify-content: center;
-  }
-  
-  .profile-details h3 {
+}
+
+.profile-details h3 {
     margin-top: 0;
-  }
-  
-  .profile-details p {
+}
+
+.profile-details p {
     margin-bottom: 10px;
-  }
-  .profile-content button{
+}
+
+.profile-content button {
     justify-content: left;
     margin-left: -50px;
-  }
+}

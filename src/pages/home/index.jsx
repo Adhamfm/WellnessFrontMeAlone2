@@ -6,10 +6,18 @@ import Footer from "../../components/layout/Footer/Footer";
 import { Button } from "@mui/material";
 import axios from "axios";
 
+
 export default function Home() {
+  // const user = {
+  //   userID:"",
+  //   accessToken:"",
+  //   refreshToken:""
+  // }
   const test = async () =>{
     try {
-      const { data } = await axios.get(`https://wellnesshub.onrender.com/api/v1/customer/65d249efb0caf340385285fb`,{headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQyNDllZmIwY2FmMzQwMzg1Mjg1ZmIiLCJpYXQiOjE3MDk3MjczMzUsImV4cCI6MTcxMjMxOTMzNX0.Q81vIV297_QjIsZQhWxcGkwMEt1s_MtYB2ACPxVxi-M"}})
+      const userLocal = JSON.parse(localStorage.getItem('user'))
+      console.log(userLocal)
+      const { data } = await axios.get(`https://wellnesshub.onrender.com/api/v1/customer/${userLocal.userId}`,{headers: {"authorization":`Bearer ${userLocal.accessToken}`}})
       console.log(data)
     } catch (error) {
       console.log(error)
@@ -18,11 +26,10 @@ export default function Home() {
   return (
     <div>
       <NavBar/>
-      <p>homew</p>
+      <p>home</p>
       <LoginButton text="HELLO"/>
       <Link to="/login"> GO TO LOGIN</Link>
-      <DevTest/>
-      <Button onClick={test} variant="contained"> GET USER DATA </Button>
+      <Button onClick={test} variant="contained"> GET USER DATA </Button> 
       <Footer/>
     </div>
   )

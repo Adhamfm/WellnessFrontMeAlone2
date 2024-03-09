@@ -5,9 +5,9 @@ import { green, purple } from '@mui/material/colors';
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(purple[500]),
-  backgroundColor: green[500],
+  backgroundColor: purple[500],
   '&:hover': {
-    backgroundColor: green[700],
+    backgroundColor: purple[700],
   },
 }));
 

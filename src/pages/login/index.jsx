@@ -48,7 +48,7 @@ export default function Login() {
       setTimeout(()=>{
         dispatch({type:"LOGIN", payload: rest});
         Cookies.set('user',JSON.stringify(rest));
-
+        localStorage.setItem('user', JSON.stringify(rest));
         //navigate("/"); //Redirect to home
       }, 2000);
       
