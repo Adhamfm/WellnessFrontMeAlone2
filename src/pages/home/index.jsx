@@ -7,30 +7,60 @@ import { Button } from "@mui/material";
 import axios from "axios";
 
 
+const userData = {
+  name: "dfgh",
+  email: "",
+  phone: {
+    countryCode: "",
+    number: ""
+  },
+  address: "",
+  following: 7
+}
+
+
+async function updateUserData() {
+  try {
+    const userLocal = JSON.parse(localStorage.getItem('user'))
+    console.log(userLocal)
+    const response = await axios.get(`https://wellnesshub.onrender.com/api/v1/customer/${userLocal.userId}`, { headers: { "authorization": `Bearer ${userLocal.accessToken}` } })
+    console.log(response)
+
+    userData.name = response.data.name;
+    userData.email = response.data.email;
+    userData.phone.countryCode = response.data.phone.countryCode;
+    userData.phone.number = response.data.phone.number;
+    userData.address = response.data.address;
+    userData.following = response.data.following;
+
+    console.log(userData)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export default function Home() {
-  // const user = {
-  //   userID:"",
-  //   accessToken:"",
-  //   refreshToken:""
-  // }
-  const test = async () =>{
+
+  const test = async () => {
     try {
       const userLocal = JSON.parse(localStorage.getItem('user'))
       console.log(userLocal)
-      const { data } = await axios.get(`https://wellnesshub.onrender.com/api/v1/customer/${userLocal.userId}`,{headers: {"authorization":`Bearer ${userLocal.accessToken}`}})
-      console.log(data)
+      const response = await axios.get(`https://wellnesshub.onrender.com/api/v1/customer/${userLocal.userId}`, { headers: { "authorization": `Bearer ${userLocal.accessToken}` } })
+      console.log(response)
+
     } catch (error) {
       console.log(error)
     }
   }
   return (
     <div>
-      <NavBar/>
+      <NavBar />
       <p>home</p>
-      <LoginButton text="HELLO"/>
+      <LoginButton text="HELLO" />
       <Link to="/login"> GO TO LOGIN</Link>
-      <Button onClick={test} variant="contained"> GET USER DATA </Button> 
-      <Footer/>
+      <Button onClick={updateUserData} variant="contained"> GET USER DATA </Button>
+      <p>{userData.name}</p>
+      <Footer />
     </div>
   )
 }
