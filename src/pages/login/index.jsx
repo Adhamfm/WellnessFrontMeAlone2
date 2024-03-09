@@ -22,7 +22,7 @@ const loginInfo = {
   password: ""
 }
 
-export default function Login() {
+export default function LoginCustomer() {
   const dispatch = useDispatch(); // to get userReducer
   const navigate = useNavigate();
   // set initial values for server response 
@@ -34,7 +34,7 @@ export default function Login() {
   const loginSubmit = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.post(`https://wellnesshub.onrender.com/api/v1/customer/login`,
+      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/customer/login`,
         {
           email: loginInfo.email,
           password: loginInfo.password
@@ -75,7 +75,7 @@ export default function Login() {
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} />
 
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign in Customer
         </Typography>
         <Box className="MaterialForm" sx={{ mt: 3 }}>
           <Formik

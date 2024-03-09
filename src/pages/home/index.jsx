@@ -41,17 +41,6 @@ async function updateUserData() {
 
 export default function Home() {
 
-  const test = async () => {
-    try {
-      const userLocal = JSON.parse(localStorage.getItem('user'))
-      console.log(userLocal)
-      const response = await axios.get(`https://wellnesshub.onrender.com/api/v1/customer/${userLocal.userId}`, { headers: { "authorization": `Bearer ${userLocal.accessToken}` } })
-      console.log(response)
-
-    } catch (error) {
-      console.log(error)
-    }
-  }
   return (
     <div>
       <NavBar />

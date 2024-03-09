@@ -72,7 +72,7 @@ export default function Signup() {
   const signupSubmit = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.post(`https://wellnesshub.onrender.com/api/v1/customer/register`,
+      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/customer/register`,
         {
           name: signupInfos.name,
           email: signupInfos.email,
