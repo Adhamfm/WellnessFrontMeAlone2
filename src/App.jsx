@@ -12,6 +12,7 @@ import MealPage from './pages/mealPage';
 import NavBar from './components/layout/NavBar/NavBar';
 import LoginCustomer from './pages/login';
 import TabsTest from './pages/tabsTest';
+import LoginSeller from './pages/loginSeller';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>} exact/>
         <Route path="/logincustomer" element={<LoginCustomer/>} exact/>
+        <Route path="/loginseller" element={<LoginSeller/>} exact/>
         <Route path="/profile" element={<Profile/>} exact/>
         <Route path="/signup" element={<Signup/>} exact/>
         <Route path="/test" element={<FormTest/>} exact/>

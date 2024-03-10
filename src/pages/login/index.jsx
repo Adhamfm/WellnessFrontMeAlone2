@@ -49,7 +49,7 @@ export default function LoginCustomer() {
         dispatch({type:"LOGIN", payload: rest});
         Cookies.set('user',JSON.stringify(rest));
         localStorage.setItem('user', JSON.stringify(rest));
-        //navigate("/"); //Redirect to home
+        navigate("/"); //Redirect to home
       }, 2000);
       
     } 
@@ -133,10 +133,15 @@ export default function LoginCustomer() {
               </Form>
             )}
           </Formik>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
+          <Grid container justifyContent="flex-end" >
+            <Grid item xs={8}>
               <Link to="/signup" variant="body2">
                 Don't have an account? Sign up!
+              </Link>
+            </Grid>
+            <Grid item xs={4}>
+              <Link to="/loginseller" variant="body2">
+                Seller? Login Here!
               </Link>
             </Grid>
           </Grid>

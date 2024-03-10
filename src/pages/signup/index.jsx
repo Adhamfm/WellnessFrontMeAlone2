@@ -254,7 +254,7 @@ export default function Signup() {
           </Formik>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link to="/login" variant="body2">
+              <Link to="/logincustomer" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>

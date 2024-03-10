@@ -1,9 +1,10 @@
-import { Button, Grid, Tab, Tabs } from '@mui/material'
+import { Button, CircularProgress, Grid, Tab, Tabs } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import NavBar from '../../components/layout/NavBar/NavBar'
 import axios from 'axios'
 import ProductCard from '../../components/productCard'
 import MealCard from '../../components/mealCard'
+import ProductSection from '../../components/profile/productSection'
 
 
 
@@ -16,6 +17,11 @@ import MealCard from '../../components/mealCard'
 
 
 export default function profile() {
+
+  const [mealsLoading, setMealsLoading] = useState(false)
+  const [sellerLoading, setSellerLoading] = useState(false)
+
+
   const [sellerData, setSellerData] = useState({
     name: "",
     email: "",
@@ -26,26 +32,15 @@ export default function profile() {
     meals: [],
     products: []
   })
-  // async function getSellerData() {
-  //   try {
-  //     const userLocal = JSON.parse(localStorage.getItem('user'))
-  //     console.log(userLocal)
-  //     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/seller/${userLocal.userId}`, { headers: { "authorization": `Bearer ${userLocal.accessToken}` } })
-  //     console.log(response)
 
-  //     setSellerData(response.data)
-
-  //     console.log(sellerData)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
   useEffect(() => {
     const getSellerData = async () => {
       try {
+        setSellerLoading(true)
         const userLocal = JSON.parse(localStorage.getItem('user'))
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/seller/${userLocal.userId}`, { headers: { "authorization": `Bearer ${userLocal.accessToken}` } })
         setSellerData(response.data)
+        setSellerLoading(false)
       } catch (error) {
         console.log(error)
       }
@@ -57,12 +52,14 @@ export default function profile() {
   useEffect(() => {
     async function fetchData() {
       try {
+        setMealsLoading(true)
         const promises = sellerData.meals.map(id =>
           axios.get(`${import.meta.env.VITE_BACKEND_URL}/meals/${id}`)
         );
         const responses = await Promise.all(promises);
         const data = responses.map(response => response.data);
         setDataList(data);
+        setMealsLoading(false)
       } catch (error) {
         console.log(error);
       }
@@ -71,52 +68,32 @@ export default function profile() {
     fetchData();
   }, [sellerData.meals]);
 
-  const [productList, setProductList] = useState([]);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const promises = sellerData.products.map(id =>
-          axios.get(`${import.meta.env.VITE_BACKEND_URL}/products/${id}`)
-        );
-        const responses = await Promise.all(promises);
-        const data = responses.map(response => response.data);
-        setProductList(data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
 
-    fetchData();
-  }, [sellerData.products]);
-  
+
+
   return (
     <>
       <NavBar />
       <h1>profile</h1>
       {/* <Button onClick={getSellerData} variant="contained"> GET DATA </Button> */}
+      {sellerLoading && <div className="loading_text"><Grid item xs={12}> <CircularProgress color="inherit" /></Grid></div>}
       <h2>{sellerData.name}</h2>
       <h3>MY MEALS</h3>
+      {mealsLoading && <div className="loading_text"><Grid item xs={12}> <CircularProgress color="inherit" /></Grid></div>}
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}
-                justifyContent="center">
+        justifyContent="center">
         {dataList.map((data, index) => (
-        <Grid item xs="auto" key={data.id}>
-          <MealCard data={data}/>
-        </Grid>)
-      )}
+          <Grid item xs="auto" key={data.id}>
+            <MealCard data={data} />
+          </Grid>)
+        )}
       </Grid>
       <br /><br />
       <hr />
       <br /><br />
       <h3>MY PRODUCTS</h3>
-      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}
-                justifyContent="center">
-        {productList.map((data2, index) => (
-        <Grid item xs="auto" key={data2.id}>
-          <ProductCard data={data2}/>
-        </Grid>)
-      )}
-      </Grid>
+      <ProductSection sellerData={sellerData}/>
     </>
   )
 }

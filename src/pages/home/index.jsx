@@ -3,6 +3,7 @@ import LoginButton from "../../components/ui/LoginButton";
 import DevTest from "../../components/devtest";
 import NavBar from "../../components/layout/NavBar/NavBar";
 import Footer from "../../components/layout/Footer/Footer";
+import RestHome from "../../components/layout/restHome/restHome";
 import { Button } from "@mui/material";
 import axios from "axios";
 
@@ -44,12 +45,14 @@ export default function Home() {
   return (
     <div>
       <NavBar />
-      <p>home</p>
+      <RestHome />
+      {/* <p>home</p>
       <LoginButton text="HELLO" />
       <Link to="/login"> GO TO LOGIN</Link>
       <Button onClick={updateUserData} variant="contained"> GET USER DATA </Button>
-      <p>{userData.name}</p>
-      <Footer />
+      <p>{userData.name}</p> */}
+      
+      {/* <Footer /> */}
     </div>
   )
 }

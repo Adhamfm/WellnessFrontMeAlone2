@@ -23,7 +23,7 @@ export default function MealPage() {
         <>
             <NavBar />
             <h1>TITLE: {meal.title}</h1>
-            {meal.images ? <img src={meal.images[0]} alt="Meal Image"/> : null}
+            {meal.images ? <img src={meal.images[2]} alt="Meal Image"/> : null}
             <h4>PRICE: {meal.price}</h4>
             <p>DESCRIPTION: {meal.description}</p>
             

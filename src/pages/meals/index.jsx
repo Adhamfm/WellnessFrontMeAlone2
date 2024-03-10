@@ -17,6 +17,7 @@ export default function Meals() {
         const getAllMeals = async () => {
             try {
                 setLoading(true)
+                console.log("Sending Request")
                 const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/meals`);
                 setAllMeals(response.data)
                 setLoading(false)
